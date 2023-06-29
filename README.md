@@ -11,16 +11,6 @@ A plugin to send Mastodon toots from napari
 
 ----------------------------------
 
-This [napari] plugin was generated with [Cookiecutter] using [@napari]'s [cookiecutter-napari-plugin] template.
-
-<!--
-Don't miss the full getting started guide to set up your new package:
-https://github.com/napari/cookiecutter-napari-plugin#getting-started
-
-and review the napari docs for plugin developers:
-https://napari.org/stable/plugins/index.html
--->
-
 ## Installation
 
 You can install `tootapari` via [pip]:
@@ -33,6 +23,23 @@ To install latest development version :
 
     pip install git+https://github.com/kephale/tootapari.git
 
+
+## Setup
+
+1. Setup your `.env` file in your XDG config directory. On MacOS this is `/Users/<username>/Library/Application\ Support/tootapari/`
+
+It should include:
+
+```
+MASTODON_INSTANCE_URL="https://mastodon.social"
+MASTODON_ACCESS_TOKEN="<your access token>"
+```
+
+2. You can generate your access token by following these instructions: https://learn.adafruit.com/intro-to-mastodon-api-circuitpython/generate-your-mastodon-token
+
+TODO: someone should port these instructions to this readme.
+
+3. Start tooting!
 
 ## Contributing
 
