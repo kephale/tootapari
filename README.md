@@ -26,7 +26,7 @@ To install latest development version :
     pip install git+https://github.com/kephale/tootapari.git
 
 
-## Setup0
+## Setup
 
 1. Setup your `.env` file in your XDG config directory. On MacOS this is `/Users/<username>/Library/Application\ Support/tootapari/`
 
