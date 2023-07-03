@@ -9,7 +9,7 @@
 
 A plugin to send Mastodon toots from napari
 
-![A screenshot of posting a toot with tootapari from napari showing the coffee cup demo image with some colormaps applied.](https://github.com/kephale/tootaparl/raw/main/tootapari_screenshot.png)
+![A screenshot of posting a toot with tootapari from napari showing the coffee cup demo image with some colormaps applied.](https://raw.githubusercontent.com/kephale/tootapari/main/tootapari_screenshot.png)
 
 ----------------------------------
 
