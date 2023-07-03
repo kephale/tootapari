@@ -27,7 +27,7 @@ class TootapariWidget(QWidget):
 
         # Textbox for entering prompt
         self.toot_textbox = QPlainTextEdit(self)
-        self.toot_textbox.appendPlainText("Tooted from napari with tootapari.")
+        self.toot_textbox.appendPlainText("Tooted from #napari with #tootapari.")
 
         self.screenshot_checkbox = QCheckBox(self)
 
