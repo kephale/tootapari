@@ -1,51 +1,88 @@
 import os
 
-from magicgui import magic_factory
-
 from appdirs import user_config_dir, user_cache_dir
 from dotenv import load_dotenv
 from mastodon import Mastodon
 from pathlib import Path
 
+from qtpy.QtWidgets import (
+    QPushButton,
+    QWidget,
+    QCheckBox,
+    QVBoxLayout,
+    QLabel,
+    QPlainTextEdit,
+)
 
-global mastodon
-mastodon = None
 
 load_dotenv(Path(user_config_dir("tootapari", "kephale")) / ".env")
 
 
-def login_mastodon():
-    global mastodon
-    if mastodon:
-        return
-    mastodon = Mastodon(
-        access_token=os.getenv("MASTODON_ACCESS_TOKEN"),
-        api_base_url=os.getenv("MASTODON_INSTANCE_URL"),
-    )
-    return mastodon
+class TootapariWidget(QWidget):
+    def __init__(self, napari_viewer):
+        super().__init__()
+        self.viewer = napari_viewer
 
+        self.mastodon = None
 
-@magic_factory(
-    call_button="Toot!",
-)
-def toot_widget(
-    viewer: "napari.viewer.Viewer",
-    text: str = "Tooted from napari with tootapari.",
-    screenshot_with_ui=True,
-):
-    global mastodon
-    login_mastodon()
-    screenshot_path = (
-        Path(user_cache_dir("tootapari", "kephale"))
-        / "tootapari_screenshot.png"
-    )
+        # Textbox for entering prompt
+        self.toot_textbox = QPlainTextEdit(self)
+        self.toot_textbox.appendPlainText("Tooted from napari with tootapari.")
 
-    viewer.screenshot(screenshot_path, canvas_only=(not screenshot_with_ui))
+        self.screenshot_checkbox = QCheckBox(self)
 
-    # Make a tempfile for the image
-    media_metadata = mastodon.media_post(screenshot_path, "image/png")
+        btn = QPushButton("Toot!")
+        btn.clicked.connect(self._on_click)
 
-    mastodon.status_post(text, media_ids=media_metadata["id"])
+        # Layout and labels
+        self.setLayout(QVBoxLayout())
+
+        label = QLabel(self)
+        label.setText("Message")
+        self.layout().addWidget(label)
+        self.layout().addWidget(self.toot_textbox)
+
+        label = QLabel(self)
+        label.setText("Screenshot with UI")
+        self.layout().addWidget(label)
+        self.layout().addWidget(self.screenshot_checkbox)
+
+        self.layout().addWidget(btn)
+
+    def login_mastodon(self):
+        if self.mastodon:
+            return
+        self.mastodon = Mastodon(
+            access_token=os.getenv("MASTODON_ACCESS_TOKEN"),
+            api_base_url=os.getenv("MASTODON_INSTANCE_URL"),
+        )
+        return self.mastodon
+
+    def _on_click(self):
+        self.toot()
+
+    def toot(self):
+        if not self.login_mastodon():
+            print("cannot login to mastodon")
+            return
+        screenshot_path = (
+            Path(user_cache_dir("tootapari", "kephale"))
+            / "tootapari_screenshot.png"
+        )
+
+        self.viewer.screenshot(
+            screenshot_path, canvas_only=(not self.get_screenshot_with_ui())
+        )
+
+        # Make a tempfile for the image
+        media_metadata = self.mastodon.media_post(screenshot_path, "image/png")
+
+        text = self.toot_textbox.document().toPlainText()
+
+        self.mastodon.status_post(text, media_ids=media_metadata["id"])
+
+    def get_screenshot_with_ui(self):
+        return self.screenshot_checkbox.checkState()
 
 
 if __name__ == "__main__":
@@ -54,6 +91,6 @@ if __name__ == "__main__":
     viewer = napari.Viewer()
     viewer.window.resize(800, 600)
 
-    widget = toot_widget()
+    widget = TootapariWidget(viewer)
 
     viewer.window.add_dock_widget(widget, name="tootapari")
