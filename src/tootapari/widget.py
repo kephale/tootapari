@@ -27,7 +27,9 @@ class TootapariWidget(QWidget):
 
         # Textbox for entering prompt
         self.toot_textbox = QPlainTextEdit(self)
-        self.toot_textbox.appendPlainText("Tooted from #napari with #tootapari.")
+        self.toot_textbox.appendPlainText(
+            "Tooted from #napari with #tootapari."
+        )
 
         self.screenshot_checkbox = QCheckBox(self)
 
@@ -74,10 +76,14 @@ class TootapariWidget(QWidget):
             screenshot_path, canvas_only=(not self.get_screenshot_with_ui())
         )
 
-        # Make a tempfile for the image
-        media_metadata = self.mastodon.media_post(screenshot_path, "image/png")
-
         text = self.toot_textbox.document().toPlainText()
+
+        alt_text = f"A screenshot automatically generated with tootapari. The corresponding toot is: {text}."
+
+        # Make a tempfile for the image
+        media_metadata = self.mastodon.media_post(
+            screenshot_path, mime_type="image/png", description=alt_text
+        )
 
         self.mastodon.status_post(text, media_ids=media_metadata["id"])
 

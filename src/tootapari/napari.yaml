@@ -2,3 +2,10 @@ name: tootapari
 display_name: Tootapari
 contributions:
   commands:
+  commands:
+    - id: tootapari.make_qwidget
+      python_name: tootapari.widget:TootapariWidget
+      title: "Tootapari!"
+  widgets:
+    - command: tootapari.make_qwidget
+      display_name: "Tootapari!"
