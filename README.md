@@ -9,6 +9,8 @@
 
 A plugin to send Mastodon toots from napari
 
+![A screenshot of posting a toot with tootapari from napari showing the coffee cup demo image with some colormaps applied.](https://github.com/kephale/tootaparl/raw/main/tootapari_screenshot.png)
+
 ----------------------------------
 
 ## Installation
@@ -24,7 +26,7 @@ To install latest development version :
     pip install git+https://github.com/kephale/tootapari.git
 
 
-## Setup
+## Setup0
 
 1. Setup your `.env` file in your XDG config directory. On MacOS this is `/Users/<username>/Library/Application\ Support/tootapari/`
 
